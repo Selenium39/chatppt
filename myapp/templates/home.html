@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+<main role="main" class="container custom-main">
+    <div class="row">
+        <div class="col-md-12">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+<div class="jumbotron">
+
+    <h1 class="display-4">轻松的幻灯片，<br>有影响的故事</h1>
+    <span id="typed" class="lead"></span>
+    <script>
+   var typed = new Typed('#typed', {
+    strings: ["用ChatGPT-4快速创建PowerPoint"],
+    typeSpeed: 20, // Increase this for a slower typing speed
+    contentType: 'html'
+  });
+
+    </script>
+    <div id="try-now">
+        <a href="{{ url_for('generate') }}" class="btn btn-primary btn-lg mt-4">立即尝试</a>
+    </div>
+</div>
+<div class="description">
+    <div class="des-title">
+        <h4>你的工作变得更快</h4>
+        <img id="rocket" src="./static/img/rocket.png">
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <img id="content-creation" src="./static/img/content-creation.png">
+                    <h5 class="card-title">高效的内容创建</h5>
+                    <p class="card-text">利用先进的AI，轻松生成你的PowerPoint演示文稿。只需提供你想要的内容，我们的应用程序会处理幻灯片的结构和摘要。告别手动创建幻灯片内容的压力，确信你的信息得到了有效的传达。</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <img id="user" src="./static/img/user.png">
+                    <h5 class="card-title">流畅的用户体验</h5>
+                    <p class="card-text">生成PowerPoint演示文稿所需的一切都在手边。有了用户友好的界面，你可以在一个地方输入你的内容，选择你的模板，并生成你的演示文稿。该应用程序减少了例行公事，让你专注于演示文稿的创意方面。</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <img id="docs" src="./static/img/docs.png">
+                    <h5 class="card-title">将复杂任务简化</h5>
+                    <p class="card-text">我们的PowerPoint生成器简化了创建结构化演示文稿的复杂性。它处理将你的信息组织成清晰、简洁和引人入胜的幻灯片的挑战。从像文档那样的长内容到你的创意的简短描述，都不用担心信息过载或幻灯片格式问题。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+var slideIndex = 0;
+showSlide(slideIndex);
+
+function changeSlide(n) {
+    showSlide(slideIndex += n);
+}
+
+function showSlide(n) {
+    var slides = document.getElementsByClassName("slide");
+    if (n >= slides.length) slideIndex = 0;
+    if (n < 0) slideIndex = slides.length - 1;
+    for (var i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    slides[slideIndex].style.display = "block";
+}
+
+</script>
+
+{% endblock content %}

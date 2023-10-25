@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="generate-showcase">
+    <form id="generate-form" method="POST" action="{{ url_for('generate') }}">
+        <label class="text-for-info" for="presentation_title">演示文稿的标题是什么？</label>
+        <input type="text" id="presentation_title" name="presentation_title" required>
+        <label class="text-for-info" for="presenter_name">作者</label>
+        <input type="text" id="presenter_name" name="presenter_name" required>
+        <label class="text-for-info" for="number_of_slide">您需要的幻灯片数量？</label>
+        <input type="number" id="number_of_slide" name="number_of_slide" required>
+
+        <label id="enter-your-content" for="user_text">输入演示文稿的内容</label>
+        <textarea id="user_text" name="user_text" required></textarea>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="insert_image" name="insert_image">
+            <label class="form-check-label" for="insert_image">
+                自动插入图片（这可能会插入不相关的信息）
+            </label>
+        </div>
+
+        <div class="template-choice text-for-info">
+            选择一个模板：
+            <input type="radio" id="simple" name="template_choice" value="simple">
+            <label for="simple">简单</label>
+            <input type="radio" id="bright_modern" name="template_choice" value="bright_modern">
+            <label for="bright_modern">明亮</label>
+            <input type="radio" id="dark_modern" name="template_choice" value="dark_modern">
+            <label for="dark_modern">深色</label>
+        </div>
+
+        <button id="generate-button" class="btn btn-primary" type="submit">生成您的演示文稿！</button>
+    </form>
+    <!-- Modal -->
+    <div class="modal" id="modal-generate">
+        <div class="modal-content">
+          <div class="modal-body">
+              <div id="holder"></div>
+              <div id="loading-indicator">
+                <div class="spinner"></div>
+                <p>正在生成您的演示文稿...</p>
+              </div>
+              <div class="generated-header">
+                <div class="generated-header"><a href="{{ url_for('download_file', filename='generated_presentation.pptx') }}">点击下载</a></div>
+              </div>
+          </div>
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock content %}
