@@ -1,5 +1,6 @@
 // Function to show the modal
 function showModal() {
+    document.getElementById("tip").innerHTML = "正在生成您的演示文稿...";
     var modal = document.getElementById('modal-generate');
     modal.style.display = 'block';
 }
@@ -10,8 +11,23 @@ function hideModal() {
     modal.style.display = 'none';
 }
 
+function showDownload(){
+    document.getElementById("tip").innerHTML = "您的演示文稿已完成。";
+    var download = document.getElementById('download');
+    download.style.display = 'block';
+}
+
+function hideDownload(){
+    var download = document.getElementById('download');
+    download.style.display = 'none';
+}
+
 // Event listener for the "Generate" button
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('downloadLink').addEventListener('click',function(e){
+      hideDownload()
+      hideModal()
+    })
     document.getElementById('generate-button').addEventListener('click', function(e) {
         e.preventDefault();  // Prevent the default form submission
         showModal();  // Show the modal
@@ -37,7 +53,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }
-            return response.json();  // This assumes the server will return JSON
+            return response
+        })
+        .then(res=>{
+            showDownload()
         })
         .catch(error => {
             console.error('Error:', error);

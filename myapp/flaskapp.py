@@ -91,7 +91,7 @@ def generate():
         presenter_name = request.form.get('presenter_name')
         insert_image = 'insert_image' in request.form
 
-        user_message = f"我希望你能为PowerPoint提出一个主意。幻灯片的数量是{number_of_slide}。" \
+        user_message = f"我希望你能为PowerPoint提出一个主意。PowerPoint的主题是{presentation_title}。幻灯片的数量是{number_of_slide}。" \
                        f"内容是：{user_text}。每张幻灯片的内容标题必须是唯一的，" \
                        f"并为每张幻灯片提取最重要的关键词（不超过两个词）。为每张幻灯片总结内容。"
 

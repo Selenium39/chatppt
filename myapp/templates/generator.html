@@ -21,7 +21,7 @@
 
         <div class="template-choice text-for-info">
             选择一个模板：
-            <input type="radio" id="simple" name="template_choice" value="simple">
+            <input type="radio" id="simple" name="template_choice" value="simple" checked>
             <label for="simple">简单</label>
             <input type="radio" id="bright_modern" name="template_choice" value="bright_modern">
             <label for="bright_modern">明亮</label>
@@ -38,10 +38,10 @@
               <div id="holder"></div>
               <div id="loading-indicator">
                 <div class="spinner"></div>
-                <p>正在生成您的演示文稿...</p>
+                <p id="tip">正在生成您的演示文稿...</p>
               </div>
-              <div class="generated-header">
-                <div class="generated-header"><a href="{{ url_for('download_file', filename='generated_presentation.pptx') }}">点击下载</a></div>
+              <div style="display: none;" id="download" class="generated-header">
+                <div class="generated-header"><a id="downloadLink" href="{{ url_for('download_file', filename='generated_presentation.pptx') }}">点击下载</a></div>
               </div>
           </div>
         </div>

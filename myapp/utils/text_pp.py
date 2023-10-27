@@ -15,26 +15,13 @@ load_dotenv()
 API_KEY = os.getenv('PEXELS_API_KEY')
 
 def parse_response(response):
-    slides = response.split('\n\n')
-    slides_content = []
-    for slide in slides:
-        lines = slide.split('\n')
-        title_line = lines[0]
-        if ': ' in title_line:
-            title = title_line.split(': ', 1)[1]  # Extract the title after 'Slide X: '
-        else:
-            title = title_line
-        content_lines = [line for line in lines[1:] if line != 'Content:']  # Skip line if it is 'Content:'
-        content = '\n'.join(content_lines)  # Join the lines to form the content
-        # Extract the keyword from the line that starts with 'Keyword:'
-        keyword_line = [line for line in lines if 'Keyword:' or 'Keywords:' in line][0]
-        keyword = keyword_line.split(': ', 1)[1]
-        slides_content.append({'title': title, 'content': content, 'keyword': keyword})
-    return slides_content
+    return json.loads(response)
+
 
 
 def search_pexels_images(keyword):
-    query = quote_plus(keyword.lower())
+    keyword = keyword[0].lower() if keyword else ""
+    query = quote_plus(keyword)
     print("Query:", query) # Debug
     PEXELS_API_URL = f'https://api.pexels.com/v1/search?query={query}&per_page=1'
     print("URL:", PEXELS_API_URL) # Debug
@@ -91,6 +78,7 @@ def create_ppt(slides_content, template_choice, presentation_title, presenter_na
 
     # add content slides
     for slide_content in slides_content:
+        print(slide_content)
         slide = prs.slides.add_slide(content_slide_layout)
 
         for placeholder in slide.placeholders:
