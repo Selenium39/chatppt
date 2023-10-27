@@ -1,6 +1,7 @@
 import io
 import json
 import os
+import re
 
 import requests
 from pptx import Presentation
@@ -15,7 +16,16 @@ load_dotenv()
 API_KEY = os.getenv('PEXELS_API_KEY')
 
 def parse_response(response):
-    return json.loads(response)
+    match = re.search(r'\[.*\]', response, re.DOTALL)
+    if match is None:
+        print("No JSON array found in response.")
+        return None
+    json_str = match.group(0)
+    try:
+        return json.loads(json_str)
+    except json.JSONDecodeError as e:
+        print(f"An error occurred while parsing the JSON array: {e}")
+        return None
 
 
 
@@ -62,7 +72,7 @@ def create_ppt(slides_content, template_choice, presentation_title, presenter_na
 
     #add subtitle
     subtitle = slide.placeholders[1]
-    subtitle.text = f"Presented by {presenter_name}"
+    subtitle.text = f"由 {presenter_name} 呈现"
 
     if template_choice == 'dark_modern':
         for paragraph in title.text_frame.paragraphs:
@@ -117,53 +127,6 @@ def create_ppt(slides_content, template_choice, presentation_title, presenter_na
                 top = slide_height - image_height - Inches(4)  # calculate top position
 
                 slide.shapes.add_picture(image_stream, left, top, width=image_width, height=image_height)
-
-    # add credits slide
-    slide = prs.slides.add_slide(content_slide_layout)
-    if template_choice == 'dark_modern':
-        for placeholder in slide.placeholders:
-            if placeholder.placeholder_format.type == 1:  # Title
-                placeholder.text = "Credits"
-                for paragraph in placeholder.text_frame.paragraphs:
-                    for run in paragraph.runs:
-                        run.font.name = 'Times New Roman'
-                        run.font.color.rgb = RGBColor(255, 165, 0)
-            elif placeholder.placeholder_format.type == 7:  # Content
-                placeholder.text = "Images provided by Pexels: https://www.pexels.com"
-                for paragraph in placeholder.text_frame.paragraphs:
-                    for run in paragraph.runs:
-                        run.font.name = 'Times New Roman'
-                        run.font.color.rgb = RGBColor(255, 255, 255)
-
-    elif template_choice == 'bright_modern':
-        for placeholder in slide.placeholders:
-            if placeholder.placeholder_format.type == 1:  # Title
-                placeholder.text = "Credits"
-                for paragraph in placeholder.text_frame.paragraphs:
-                    for run in paragraph.runs:
-                        run.font.name = 'Arial'
-                        run.font.color.rgb = RGBColor(255, 20, 147)
-            elif placeholder.placeholder_format.type == 7:  # Content
-                placeholder.text = "Images provided by Pexels: https://www.pexels.com"
-                for paragraph in placeholder.text_frame.paragraphs:
-                    for run in paragraph.runs:
-                        run.font.name = 'Arial'
-                        run.font.color.rgb = RGBColor(0, 0, 0)
-
-    else:
-        for placeholder in slide.placeholders:
-            if placeholder.placeholder_format.type == 1:  # Title
-                placeholder.text = "Credits"
-                for paragraph in placeholder.text_frame.paragraphs:
-                    for run in paragraph.runs:
-                        run.font.name = 'Arial'
-                        run.font.color.rgb = RGBColor(0, 0, 0)
-            elif placeholder.placeholder_format.type == 7:  # Content
-                placeholder.text = "Images provided by Pexels: https://www.pexels.com"
-                for paragraph in placeholder.text_frame.paragraphs:
-                    for run in paragraph.runs:
-                        run.font.name = 'Arial'
-                        run.font.color.rgb = RGBColor(0, 0, 0)
 
     # Delete the first two slides after all new slides have been added
     delete_first_two_slides(prs)

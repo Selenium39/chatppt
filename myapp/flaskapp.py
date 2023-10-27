@@ -116,4 +116,4 @@ def download_file(filename):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0',port=5001, debug=False)
