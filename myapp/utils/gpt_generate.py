@@ -29,7 +29,7 @@ def build_conversation(user_message):
 
 def generate_assistant_message(conversation):
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=conversation
     )
     return response['choices'][0]['message']['content']
