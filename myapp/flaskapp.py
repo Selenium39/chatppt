@@ -9,6 +9,8 @@ from models import User
 from utils.gpt_generate import chat_development
 from utils.text_pp import parse_response, create_ppt
 from dotenv import load_dotenv
+import requests
+import json
 
 load_dotenv()  # This loads the .env file
 
@@ -91,15 +93,38 @@ def generate():
         presenter_name = request.form.get('presenter_name')
         insert_image = 'insert_image' in request.form
 
-        user_message = f"我希望你能为PowerPoint提出一个主意。PowerPoint的主题是{presentation_title}。幻灯片的数量是{number_of_slide}。" \
-                       f"内容是：{user_text}。每张幻灯片的内容标题必须是唯一的，" \
-                       f"并为每张幻灯片提取最重要的关键词（不超过两个词）。为每张幻灯片总结内容。"
+        # Prepare the payload for the API request
+        payload = {
+            "inputs": {
+                "presentation_title": presentation_title,
+                "number_of_slide": number_of_slide,
+                "user_text": user_text
+            },
+            "response_mode": "blocking",
+            "user": "ChatPPT"
+        }
 
-        assistant_response = chat_development(user_message)
-        # Check the response (for debug)
-        print(f"Assistant Response:\n{assistant_response}")
-        slides_content = parse_response(assistant_response)
-        create_ppt(slides_content, template_choice, presentation_title, presenter_name, insert_image)
+        # Send the request to the Dify.ai API
+        api_key = os.getenv("OPENAI_API_KEY")
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
+        }
+        response = requests.post('https://api.dify.ai/v1/completion-messages', json=payload, headers=headers)
+
+        if response.status_code == 200:
+            response_data = response.json()
+            assistant_answer = response_data.get("answer")
+
+            # Parse the 'answer' to extract slide information
+            try:
+                slides_content = json.loads(assistant_answer)
+                print(f"Slides Content:\n{slides_content}")
+                create_ppt(slides_content, template_choice, presentation_title, presenter_name, insert_image)
+            except json.JSONDecodeError:
+                print("Error parsing slide content from response")
+        else:
+            print("Error in API call:", response.status_code, response.text)
 
     return render_template('generator.html', title='Generate')
 
