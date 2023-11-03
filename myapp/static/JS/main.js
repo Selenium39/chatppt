@@ -58,11 +58,10 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.filename) {
-                    showDownload();
-                    // Update the download link with the new filename
+                    console.log(data.filename)
                     document.getElementById('downloadLink').href = `/download/${data.filename}`;
+                    showDownload();
                 } else if (data.error) {
-                    // Handle error
                     console.error('Error generating file:', data.error);
                 }
             })
