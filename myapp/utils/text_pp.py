@@ -33,7 +33,7 @@ def search_pexels_images(keyword):
     keyword = keyword[0].lower() if keyword else ""
     query = quote_plus(keyword)
     print("Query:", query) # Debug
-    PEXELS_API_URL = f'https://api.pexels.com/v1/search?query={query}&per_page=1'
+    PEXELS_API_URL = f'https://api.pexels.com/v1/search?query={query}&per_page=1&locale=zh-CN'
     print("URL:", PEXELS_API_URL) # Debug
     headers = {
         'Authorization': API_KEY
