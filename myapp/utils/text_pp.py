@@ -2,6 +2,7 @@ import io
 import json
 import os
 import re
+import uuid
 
 import requests
 from pptx import Presentation
@@ -131,5 +132,7 @@ def create_ppt(slides_content, template_choice, presentation_title, presenter_na
     # Delete the first two slides after all new slides have been added
     delete_first_two_slides(prs)
 
+    unique_filename = f"{uuid.uuid4()}.pptx"
     # Save the presentation
-    prs.save(os.path.join('generated', 'generated_presentation.pptx'))
+    prs.save(os.path.join('generated', unique_filename))
+    return unique_filename

@@ -11,24 +11,24 @@ function hideModal() {
     modal.style.display = 'none';
 }
 
-function showDownload(){
+function showDownload() {
     document.getElementById("tip").innerHTML = "您的演示文稿已完成。";
     var download = document.getElementById('download');
     download.style.display = 'block';
 }
 
-function hideDownload(){
+function hideDownload() {
     var download = document.getElementById('download');
     download.style.display = 'none';
 }
 
 // Event listener for the "Generate" button
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('downloadLink').addEventListener('click',function(e){
-      hideDownload()
-      hideModal()
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('downloadLink').addEventListener('click', function (e) {
+        hideDownload()
+        hideModal()
     })
-    document.getElementById('generate-button').addEventListener('click', function(e) {
+    document.getElementById('generate-button').addEventListener('click', function (e) {
         e.preventDefault();  // Prevent the default form submission
         showModal();  // Show the modal
 
@@ -49,18 +49,26 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response
-        })
-        .then(res=>{
-            showDownload()
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.filename) {
+                    showDownload();
+                    // Update the download link with the new filename
+                    document.getElementById('downloadLink').href = `/download/${data.filename}`;
+                } else if (data.error) {
+                    // Handle error
+                    console.error('Error generating file:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     });
 });
 

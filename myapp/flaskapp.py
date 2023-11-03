@@ -85,6 +85,7 @@ def logout():
 
 @app.route('/generator', methods=['GET', 'POST'])
 def generate():
+    filename = ''
     if request.method == 'POST':
         number_of_slide = request.form.get('number_of_slide')
         user_text = request.form.get('user_text')
@@ -120,7 +121,8 @@ def generate():
             try:
                 slides_content = json.loads(assistant_answer)
                 print(f"Slides Content:\n{slides_content}")
-                create_ppt(slides_content, template_choice, presentation_title, presenter_name, insert_image)
+                filename = create_ppt(slides_content, template_choice, presentation_title, presenter_name, insert_image)
+                return jsonify({'filename': filename})
             except json.JSONDecodeError:
                 print("Error parsing slide content from response")
         else:
