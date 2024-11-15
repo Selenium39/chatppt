@@ -54,11 +54,13 @@ pip install -r requirements.txt
 ```
 SECRET_KEY=your_secret_key
 OPENAI_API_KEY=your_dify_api_key
+PEXELS_API_KEY=your_pexels_api_key
 ```
 
 4. 运行项目
 ```bash
-python app.py
+cd myapp
+python flaskapp.py
 ```
 
 访问 `http://localhost:5001` 即可使用
